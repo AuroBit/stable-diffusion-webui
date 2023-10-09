@@ -4,6 +4,7 @@
 # change the variables in webui-user.sh instead #
 #################################################
 
+python aurobit_init.py
 
 use_venv=1
 if [[ $venv_dir == "-" ]]; then
