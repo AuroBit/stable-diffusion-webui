@@ -25,7 +25,7 @@ for model_file in sd_models:
 ext_git_path = {
     "sd-webui-controlnet": "https://github.com/Mikubill/sd-webui-controlnet",      # controlnet
     "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
-    "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
+    # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
 }
 ext_path = 'extensions'
 for repo_name, rep_path in ext_git_path.items():
