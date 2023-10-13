@@ -7,7 +7,8 @@ from git import repo
 # download models
 sd_models = [
     "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_models/beautifulRealistic_brav5.safetensors",
-    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_models/majicmixRealistic_v5.safetensors"
+    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_models/majicmixRealistic_v5.safetensors",
+    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_models/realisticVisionV51_v51VAE-inpainting.safetensors"
 ]
 sd_path = 'models/Stable-diffusion'
 for model_file in sd_models:
