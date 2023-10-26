@@ -22,11 +22,28 @@ for model_file in sd_models:
     print(f'Download model DONE: {model_file}')
 
 
+# download loras
+sd_lora = [
+    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_lora/meiyan_V1.safetensors"
+]
+sd_path = 'models/Lora'
+for model_file in sd_lora:
+    base_name = os.path.basename(model_file)
+    dl_path = f'{sd_path}/{base_name}'
+    if not os.path.exists(dl_path):
+        print(f'Downloading lora: {model_file}')
+        urllib.request.urlretrieve(model_file, dl_path)
+    else:
+        print(f'LORA exist: {model_file}')
+    print(f'Download lora DONE: {model_file}')
+
+
 # extensions
 ext_git_path = {
     "sd-webui-controlnet": "https://github.com/Mikubill/sd-webui-controlnet",      # controlnet
     "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
     # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
+    "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
 }
 ext_path = 'extensions'
 for repo_name, rep_path in ext_git_path.items():
@@ -58,6 +75,8 @@ if os.path.exists(control_net_dir):
         else:
             print(f'Controlnet exist: {model_file}')
         print(f'Download controlnet DONE: {model_file}')
+
+# download animationdiff models
         
 
             
