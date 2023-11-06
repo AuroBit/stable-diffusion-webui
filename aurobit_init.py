@@ -41,7 +41,8 @@ for model_file in sd_lora:
 # extensions
 ext_git_path = {
     "sd-webui-controlnet": "https://github.com/Mikubill/sd-webui-controlnet",      # controlnet
-    "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
+    # "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
+    "adetailer": "https://github.com/AuroBit/adetailer.git",
     # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
     "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
 }
@@ -76,9 +77,22 @@ if os.path.exists(control_net_dir):
             print(f'Controlnet exist: {model_file}')
         print(f'Download controlnet DONE: {model_file}')
 
-# download animationdiff models
-        
-
+# download ad-relative models
+ad_rel_models = [
+    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/G.pth"
+]
+ad_rel_model_dir = f"models/adetailer"
+if not os.path.exists(ad_rel_model_dir):
+    os.makedirs(ad_rel_model_dir)
+for md_url in ad_rel_models:
+    md_name = os.path.basename(md_url)
+    local_path = f"{ad_rel_model_dir}/{md_name}"
+    if not os.path.exists(local_path):
+        print(f'Downloading ad-relative models: {md_url}')
+        urllib.request.urlretrieve(md_url, local_path)
+    else:
+        print(f'Ad-relative model exist: {md_url}')
+        print(f'Download ad-relative model  DONE: {md_url}')
             
         
     
