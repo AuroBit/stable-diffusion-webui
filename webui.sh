@@ -221,6 +221,7 @@ else
 fi
 
 # Aurobit custom init
+pip install GitPython
 "${python_cmd}" aurobit_init.py
 
 
