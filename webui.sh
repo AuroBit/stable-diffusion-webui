@@ -4,7 +4,7 @@
 # change the variables in webui-user.sh instead #
 #################################################
 
-python aurobit_init.py
+
 
 use_venv=1
 if [[ $venv_dir == "-" ]]; then
@@ -219,6 +219,10 @@ else
     printf "python venv already activate or run without venv: ${VIRTUAL_ENV}"
     printf "\n%s\n" "${delimiter}"
 fi
+
+# Aurobit custom init
+"${python_cmd}" aurobit_init.py
+
 
 # Try using TCMalloc on Linux
 prepare_tcmalloc() {

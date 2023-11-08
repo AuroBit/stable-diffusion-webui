@@ -2,6 +2,7 @@ GitPython
 Pillow
 accelerate
 
+httpx==0.24.1
 basicsr
 blendmodes
 clean-fid
