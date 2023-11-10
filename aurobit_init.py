@@ -79,7 +79,7 @@ if os.path.exists(control_net_dir):
 
 # download ad-relative models
 ad_rel_models = [
-    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/G.pth"
+    "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/sow_pyramid_a5_e3d2_remapped.pth"
 ]
 ad_rel_model_dir = f"models/adetailer"
 if not os.path.exists(ad_rel_model_dir):
