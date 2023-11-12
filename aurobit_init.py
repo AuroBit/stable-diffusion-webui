@@ -27,6 +27,8 @@ sd_lora = [
     "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_lora/meiyan_V1.safetensors"
 ]
 sd_path = 'models/Lora'
+if not os.path.exists(sd_path):
+    os.makedirs(sd_path)
 for model_file in sd_lora:
     base_name = os.path.basename(model_file)
     dl_path = f'{sd_path}/{base_name}'
