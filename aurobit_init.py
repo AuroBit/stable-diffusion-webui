@@ -2,6 +2,7 @@ import urllib.request
 import os
 import argparse
 import shutil
+import time
 
 from git import repo
 
@@ -71,8 +72,11 @@ def ab_download_resource(url, file_dir):
         if not os.path.exists(file_cache_dir):
             os.makedirs(file_cache_dir)
         if not os.path.exists(file_cache_path):
+            _start_time = time.time()
             urllib.request.urlretrieve(url, file_cache_path)
+            _end_time = time.time()
             print(f'[Download to cache] {url} -> {file_cache_path}')
+            print("Elapsed time: {:.2f} seconds".format(_end_time - _start_time))
         else:
             print(f'[Download to cache] file exists: {file_cache_path}')
             
@@ -88,8 +92,12 @@ def ab_download_resource(url, file_dir):
     else:
         file_path = f'{file_dir}/{base_name}'
         if not os.path.exists(file_path):
+            _start_time = time.time()
             urllib.request.urlretrieve(url, file_path)
+            _end_time = time.time()
             print(f'[Download directly] {url} -> {file_path}')
+            print("Elapsed time: {:.2f} seconds".format(_end_time - _start_time))
+            
         else:
             print(f'[Download directly] file exists: {file_path}')
             
@@ -103,7 +111,7 @@ ext_git_path = {
     # "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
     "adetailer": "https://github.com/AuroBit/adetailer.git",
     # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
-    "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
+    # "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
 }
 ext_path = 'extensions'
 for repo_name, rep_path in ext_git_path.items():
