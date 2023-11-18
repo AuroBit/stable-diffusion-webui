@@ -21,6 +21,7 @@ print(f"Cache resource: {cache_resource}")
 print(f"Use S3: {use_s3}")
 
 cache_dir = "/workspace/sd_resource"
+failed_retry = 5
 
 resource_path = {
     "tencent": {
@@ -102,67 +103,75 @@ def ab_download_resource(url, file_dir):
             print(f'[Download directly] file exists: {file_path}')
             
 
-
-
-# ==================== prepare extensions ============================
-
-ext_git_path = {
-    "sd-webui-controlnet": "https://github.com/Mikubill/sd-webui-controlnet",      # controlnet
-    # "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
-    "adetailer": "https://github.com/AuroBit/adetailer.git",
-    # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
-    # "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
-}
-ext_path = 'extensions'
-for repo_name, rep_path in ext_git_path.items():
+try_cnt = failed_retry
+while try_cnt > 0:
+    try_cnt = try_cnt - 1
+    
     try:
-        local_path = f'{ext_path}/{repo_name}'
-        print(f'Cloning repo from: {rep_path}')
-        print(f'    to: {local_path}')
-        repo.Repo.clone_from(rep_path, local_path)
+        # ==================== prepare extensions ============================
+
+        ext_git_path = {
+            "sd-webui-controlnet": "https://github.com/Mikubill/sd-webui-controlnet",      # controlnet
+            # "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
+            "adetailer": "https://github.com/AuroBit/adetailer.git",
+            # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
+            # "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
+        }
+        ext_path = 'extensions'
+        for repo_name, rep_path in ext_git_path.items():
+            try:
+                local_path = f'{ext_path}/{repo_name}'
+                print(f'Cloning repo from: {rep_path}')
+                print(f'    to: {local_path}')
+                repo.Repo.clone_from(rep_path, local_path)
+            except Exception as e:
+                print(f'Clone {rep_path} FAIL.  repo exist or network error.')
+                print(e.args)
+            print(f'Clone repo DONE: {rep_path}')
+
+            
+            
+
+        # ====================== prepare resource =================================
+
+        all_resource = resource_path["s3"] if use_s3 else resource_path["tencent"]
+        sd_path = 'models/Stable-diffusion'
+        sd_lora_path = 'models/Lora'
+        control_net_dir = f'{ext_path}/sd-webui-controlnet/models'
+        ad_rel_model_dir = f"models/adetailer"
+
+
+        # download models
+        print(f'************ Download SD models ********************')
+        sd_models = all_resource["sd_models"]
+        for model_file in sd_models:
+            ab_download_resource(model_file, sd_path)
+
+
+        # download loras
+        print(f'************* Download Lora ******************')
+        sd_lora = all_resource["sd_lora"]
+        for model_file in sd_lora:
+            ab_download_resource(model_file, sd_lora_path)
+
+
+        # download control net model
+        print(f'************* Download controlnet models ******************')
+        controlnet_models = all_resource["controlnet_models"]
+        if os.path.exists(control_net_dir):
+            for model_file in controlnet_models:
+                ab_download_resource(model_file, control_net_dir)
+
+        # download ad-relative models
+        print(f'************* Download ad-relative models ******************')
+        ad_rel_models = all_resource["ad_ext_models"]
+        for md_url in ad_rel_models:
+            ab_download_resource(md_url, ad_rel_model_dir)
+            
+        break    
+    
     except Exception as e:
-        print(f'Clone {rep_path} FAIL.  repo exist or network error.')
-        print(e.args)
-    print(f'Clone repo DONE: {rep_path}')
-
-    
-    
-
-# ====================== prepare resource =================================
-
-all_resource = resource_path["s3"] if use_s3 else resource_path["tencent"]
-sd_path = 'models/Stable-diffusion'
-sd_lora_path = 'models/Lora'
-control_net_dir = f'{ext_path}/sd-webui-controlnet/models'
-ad_rel_model_dir = f"models/adetailer"
-
-
-# download models
-print(f'************ Download SD models ********************')
-sd_models = all_resource["sd_models"]
-for model_file in sd_models:
-    ab_download_resource(model_file, sd_path)
-
-
-# download loras
-print(f'************* Download Lora ******************')
-sd_lora = all_resource["sd_lora"]
-for model_file in sd_lora:
-    ab_download_resource(model_file, sd_lora_path)
-
-
-# download control net model
-print(f'************* Download controlnet models ******************')
-controlnet_models = all_resource["controlnet_models"]
-if os.path.exists(control_net_dir):
-    for model_file in controlnet_models:
-        ab_download_resource(model_file, control_net_dir)
-
-# download ad-relative models
-print(f'************* Download ad-relative models ******************')
-ad_rel_models = all_resource["ad_ext_models"]
-for md_url in ad_rel_models:
-    ab_download_resource(md_url, ad_rel_model_dir)
+        print(f"Exception: {e}")
             
         
     
