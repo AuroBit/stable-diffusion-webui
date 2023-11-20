@@ -111,20 +111,28 @@ while try_cnt > 0:
         # ==================== prepare extensions ============================
 
         ext_git_path = {
-            "sd-webui-controlnet": "https://github.com/Mikubill/sd-webui-controlnet",      # controlnet
+            "sd-webui-controlnet": ["https://github.com/Mikubill/sd-webui-controlnet", "c1f3d6f8505074d73b13eaf67f331bf869d7b940"],      # controlnet
             # "adetailer": "https://github.com/Bing-su/adetailer.git",             # adtailer
-            "adetailer": "https://github.com/AuroBit/adetailer.git",
+            "adetailer": ["https://github.com/AuroBit/adetailer.git", ""],
             # "sd-weibui-inpaint-anything": "https://github.com/Uminosachi/sd-webui-inpaint-anything.git"
             # "sd-webui-animatediff": "https://github.com/continue-revolution/sd-webui-animatediff.git"
         }
         ext_path = 'extensions'
-        for repo_name, rep_path in ext_git_path.items():
+        for repo_name, rep_info in ext_git_path.items():
+            rep_path, rep_cm = rep_info
             try:
                 local_path = f'{ext_path}/{repo_name}'
                 print(f'Cloning repo from: {rep_path}')
                 print(f'    to: {local_path}')
                 repo.Repo.clone_from(rep_path, local_path)
-            except Exception as e:
+                
+                if rep_cm is not None and rep_cm != "":
+                    cur_rep = repo.Repo(local_path)
+                    new_branch = cur_rep.create_head("aurobit_work", rep_cm)
+                    cur_rep.head.reference = new_branch
+                    cur_rep.head.reset(index=True, working_tree=True)
+                    
+            except Exception as e:  
                 print(f'Clone {rep_path} FAIL.  repo exist or network error.')
                 print(e.args)
             print(f'Clone repo DONE: {rep_path}')
