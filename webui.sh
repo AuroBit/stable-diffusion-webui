@@ -221,7 +221,7 @@ fi
 
 # Aurobit custom init
 pip install GitPython
-"${python_cmd}" aurobit_init.py -cache yes -s3 yes
+"${python_cmd}" aurobit_init.py -cache no -s3 yes
 
 
 # Try using TCMalloc on Linux
