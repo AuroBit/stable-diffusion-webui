@@ -1,6 +1,6 @@
 @echo off
 
-python aurobit_init.py
+python aurobit_init.py -cache no -s3 no
 
 set PYTHON=
 set GIT=

@@ -37,7 +37,11 @@ resource_path = {
         ],
         "ad_ext_models": [
             "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/sow_pyramid_a5_e3d2_remapped.pth"
-        ]
+        ],
+        "sd_embeddings":["https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/AS-YoungV2.pt",
+                         "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/AS-YoungerV2.pt",
+                         "https://aiyo-1319341997.cos.ap-nanjing.myqcloud.com/common_resource/sd_other/AS-YoungestV2.pt"
+                         ]
     },
     
     "s3": {
@@ -53,7 +57,11 @@ resource_path = {
         ],
         "ad_ext_models": [
             "https://aurobit-s3-01.s3.ap-northeast-1.amazonaws.com/common_resource/sd/sd_others/sow_pyramid_a5_e3d2_remapped.pth"
-        ]
+        ],
+        "sd_embeddings":["https://aurobit-s3-01.s3.ap-northeast-1.amazonaws.com/common_resource/sd/sd_others/AS-YoungerV2.pt", 
+                         "https://aurobit-s3-01.s3.ap-northeast-1.amazonaws.com/common_resource/sd/sd_others/AS-YoungestV2.pt",
+                         "https://aurobit-s3-01.s3.ap-northeast-1.amazonaws.com/common_resource/sd/sd_others/AS-YoungV2.pt"
+                         ]
     },
 }
 
@@ -145,6 +153,7 @@ while try_cnt > 0:
         all_resource = resource_path["s3"] if use_s3 else resource_path["tencent"]
         sd_path = 'models/Stable-diffusion'
         sd_lora_path = 'models/Lora'
+        sd_embedding_path = 'embeddings'
         control_net_dir = f'{ext_path}/sd-webui-controlnet/models'
         ad_rel_model_dir = f"models/adetailer"
 
@@ -162,7 +171,12 @@ while try_cnt > 0:
         for model_file in sd_lora:
             ab_download_resource(model_file, sd_lora_path)
 
-
+        # download embeddings
+        print(f'************* Download Embeddings ******************')
+        sd_embeddings = all_resource["sd_embeddings"]
+        for embedding in sd_embeddings:
+            ab_download_resource(embedding, sd_embedding_path)
+    
         # download control net model
         print(f'************* Download controlnet models ******************')
         controlnet_models = all_resource["controlnet_models"]
